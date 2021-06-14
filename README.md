@@ -25,7 +25,9 @@ As developers, it is important not only to be aware of the different approaches,
         <a href="https://redux.js.org/" target="_blank" rel="noopener noreferrer"> 
         <code><img src="https://img.shields.io/badge/Redux-593D88?style=for-the-badge&logo=redux&logoColor=white" /></code> 
     </a>
-        </a>
         <a href="https://material-ui.com/" target="_blank" rel="noopener noreferrer"> 
         <code><img src="https://img.shields.io/badge/Material--UI-0081CB?style=for-the-badge&logo=material-ui&logoColor=white" /> </code> 
+    </a>
+        <a href="https://jestjs.io/" target="_blank" rel="noopener noreferrer"> 
+        <code><img src="https://img.shields.io/badge/Jest-C21325?style=for-the-badge&logo=jest&logoColor=white"/> </code> 
     </a>
