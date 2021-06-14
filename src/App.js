@@ -1,12 +1,13 @@
 import { React, useState } from 'react';
 import './App.css';
-import Button from '@material-ui/core/Button';
+import Action from './components/Action';
+import Count from './components/Count';
 
-// Local component state in React
+// Component prop drilling in React
 
 function App() {
 
-// "The simplest way to implement the counter is to use local component state with the useState Hook."
+// Separating our app out into different components presents a new challnge. We need some way to communicate between them and this is where prop drilling comes into play.
 
   const [count, setCount] = useState(0);
 
@@ -23,28 +24,16 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>{count}</h1>
+        <Count count={count}/>
         <div className="App-actions">
-          <Button
-          variant="contained"
-          color="primary"
-          onClick={decreaseCount}
-          >
-            -
-          </Button>
-          <Button
-          variant="contained"
-          color="primary"
-          onClick={increaseCount}
-          >
-            +
-          </Button>
+          <Action onClick={decreaseCount} label="-"/>
+          <Action onClick={increaseCount} label="+"/>
         </div>
       </header>
     </div>
   );
 }
 
-// "If this was a real project, it is likely that in the future, we would need more buttons and headers elsewhere in our app. And it is a good idea to make sure they all look and behave consistently, which is why we should probably turn them into reusable React components."
+// "This looks great! But imagine the following scenario: what if we need to only display the count on our home route and have a separate route /controls where we display both the count and the control buttons? How should we go about this?"
 
 export default App;
