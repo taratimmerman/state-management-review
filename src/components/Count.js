@@ -1,16 +1,14 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { useCount } from '../App';
 
-const Count = props => {
+const Count = () => {
+    const [state] = useCount();
+
     return (
         <h1>
-            {props.count}
+            {state}
         </h1>
     );
-};
-
-Count.propTypes = {
-    count: PropTypes.number
 };
 
 export default Count;
