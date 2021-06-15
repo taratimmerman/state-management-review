@@ -1,17 +1,18 @@
 import React from 'react';
 import Count from '../components/Count';
 import Action from '../components/Action';
-import { useCount } from '../App';
+import { useDispatch } from 'react-redux';
+import { counterSlice } from '../App';
 
 const Controls = () => {
-    const [state, dispatch] = useCount();
+    const dispatch = useDispatch();
 
     return (
         <>
-            <Count count={state}/>
+            <Count />
             <div className="App-actions">
-                <Action onClick={() => dispatch({ type: 'DECREMENT' })} label="-" />
-                <Action onClick={() => dispatch({ type: 'INCREMENT' })} label="+" />
+                <Action onClick={() => dispatch(counterSlice.actions.decrement())} label="-" />
+                <Action onClick={() => dispatch(counterSlice.actions.increment())} label="+" />
             </div>
         </>
     );
