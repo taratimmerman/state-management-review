@@ -1,19 +1,17 @@
 import React from 'react';
 import Count from '../components/Count';
-import PropTypes from 'prop-types';
+import { useCount } from '../App';
 
-const Home = props => {
+const Home = () => {
+    const [state] = useCount();
+    
     return (
         <>
-            <Count count={props.count}/>
+            <Count count={state}/>
             <h4>Hello! Welcome to Counter.</h4>
             <p>Navigate to the controls page to change the count.</p>
         </>
     );
-};
-
-Home.propTypes = {
-    count: PropTypes.number
 };
 
 export default Home;

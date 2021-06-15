@@ -1,17 +1,22 @@
-/* eslint-disable react/prop-types */
 import React from 'react';
 import Button from '@material-ui/core/Button';
+import PropTypes from 'prop-types';
 
-const Action = ({ label, onClick }) => {
-    return (
-        <Button
-        variant="contained"
-        color="primary"
-        onClick={onClick}
-        >
-          {label}
-        </Button>
-    );
+const Action = props => {
+  return (
+    <Button
+    variant="contained"
+    color="primary"
+    onClick={props.onClick}
+    >
+      {props.label}
+    </Button>
+  );
+};
+
+Action.propTypes = {
+  onClick: PropTypes.func,
+  label: PropTypes.string
 };
 
 export default Action;

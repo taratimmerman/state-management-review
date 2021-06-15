@@ -1,52 +1,58 @@
-import { React, useState } from 'react';
+import { React, createContext, useContext, useReducer } from 'react';
 import './App.css';
 import Navigation from './components/Navigation';
 import Controls from './pages/Controls';
 import Home from './pages/Home';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import reducer from './reducers/countReducer';
+import PropTypes from 'prop-types';
 
-// Component prop drilling in React
+// Using Context + useReducer
+const initialState = 0;
+
+const CountContext = createContext(null);
+
+export const useCount = () => {
+  const value = useContext(CountContext);
+  if (value === null) throw new Error('CountProvider missing');
+  return value;
+};
+
+const CountProvider = ({ children }) => (
+  <CountContext.Provider value={useReducer(reducer, initialState)}>
+    {children}
+  </CountContext.Provider>
+);
+
+CountProvider.propTypes = {
+  children: PropTypes.string
+};
 
 function App() {
 
-  // Separating our app out into different components presents a new challnge. We need some way to communicate between them and this is where prop drilling comes into play.
-  // Given that we are building a single page application, there is now a second piece of state we need to handle — the route we are on. Let’s do this with React Router.
-
-  const [count, setCount] = useState(0);
-
-  const increaseCount = () => {
-    setCount(count + 1);
-  };
-
-  const decreaseCount = () => {
-    if (count > 0) {
-      setCount(count - 1);
-    }
-  };
-
   return (
-    <Router>
-      <div className="App">
-        <header className="App-header">
-          <Navigation />
-          <Switch>
-            <Route path="/controls">
-              <Controls
-                increaseCount={increaseCount}
-                decreaseCount={decreaseCount}
-                count={count}
-              />
-            </Route>
-            <Route path="/">
-              <Home count={count} />
-            </Route>
-          </Switch>
-        </header>
-      </div>
-    </Router>
+    <CountProvider>
+      <Router>
+        <div className="App">
+          <header className="App-header">
+            <Navigation />
+            <Switch>
+              <Route path="/controls">
+                <Controls />
+              </Route>
+              <Route path="/">
+                <Home />
+              </Route>
+            </Switch>
+          </header>
+        </div>
+      </Router>
+    </CountProvider>
   );
 }
 
-// "Nice! We now have our separate routes and everything works as expected. However, you may notice a problem. We are keeping our count state in App and using props to pass it down the component tree. But it appears that we pass down the same prop over and over again until we reach the component that needs to use it. Of course, as our app grows, it will only get worse. This is known as prop drilling."
+// "Awesome! We have solved the problem of prop drilling. We get additional points for having made our code more declarative by creating a descriptive reducer."
+
+// "We are happy with our implementation, and, for many use cases, it is really all we need. But wouldn’t it be great if we could persist the count so it does not get reset to 0 every time we refresh the page? And to have a log of the application state? What about crash reports?"
 
 export default App;

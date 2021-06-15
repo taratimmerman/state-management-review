@@ -1,24 +1,20 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import Count from '../components/Count';
 import Action from '../components/Action';
+import { useCount } from '../App';
 
-const Controls = props => {
+const Controls = () => {
+    const [state, dispatch] = useCount();
+
     return (
         <>
-            <Count count={props.count}/>
+            <Count count={state}/>
             <div className="App-actions">
-                <Action onClick={props.decreaseCount} label="-" />
-                <Action onClick={props.increaseCount} label="+" />
+                <Action onClick={() => dispatch({ type: 'DECREMENT' })} label="-" />
+                <Action onClick={() => dispatch({ type: 'INCREMENT' })} label="+" />
             </div>
         </>
     );
-};
-
-Controls.propTypes = {
-    decreaseCount: PropTypes.func,
-    increaseCount: PropTypes.func,
-    count: PropTypes.number
 };
 
 export default Controls;
