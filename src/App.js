@@ -1,37 +1,51 @@
-import { React, createContext, useContext, useReducer } from 'react';
+import { React } from 'react';
 import './App.css';
 import Navigation from './components/Navigation';
 import Controls from './pages/Controls';
 import Home from './pages/Home';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import reducer from './reducers/countReducer';
-import PropTypes from 'prop-types';
+import { configureStore, createSlice } from '@reduxjs/toolkit';
+import { Provider } from 'react-redux';
 
-// Using Context + useReducer
-const initialState = 0;
+// Using Redux for state management
 
-const CountContext = createContext(null);
+// Persisting count state
+export const persistedState = localStorage.getItem('reduxState')
+  ? JSON.parse(localStorage.getItem('reduxState'))
+  : 0;
 
-export const useCount = () => {
-  const value = useContext(CountContext);
-  if (value === null) throw new Error('CountProvider missing');
-  return value;
-};
+export const counterSlice = createSlice({
+  name: 'counter',
+  initialState: {
+    value: persistedState ? persistedState.counter.value : 0,
+  },
+  reducers: {
+    increment: state => {
+      state.value += 1;
+    },
+    decrement: state => {
+      if (state.value > 0) {
+        state.value -= 1;
+      }
+    },
+  },
+});
 
-const CountProvider = ({ children }) => (
-  <CountContext.Provider value={useReducer(reducer, initialState)}>
-    {children}
-  </CountContext.Provider>
-);
+const store = configureStore({
+  reducer: { counter: counterSlice.reducer },
+}, persistedState);
 
-CountProvider.propTypes = {
-  children: PropTypes.string
-};
+store.subscribe(()=>{
+  localStorage.setItem('reduxState', JSON.stringify(store.getState()));
+});
+
+// eslint-disable-next-line no-unused-vars
+const { increment, decrement } = counterSlice.actions;
 
 function App() {
 
   return (
-    <CountProvider>
+    <Provider store={store}>
       <Router>
         <div className="App">
           <header className="App-header">
@@ -47,12 +61,10 @@ function App() {
           </header>
         </div>
       </Router>
-    </CountProvider>
+    </Provider>
   );
 }
 
-// "Awesome! We have solved the problem of prop drilling. We get additional points for having made our code more declarative by creating a descriptive reducer."
-
-// "We are happy with our implementation, and, for many use cases, it is really all we need. But wouldn’t it be great if we could persist the count so it does not get reset to 0 every time we refresh the page? And to have a log of the application state? What about crash reports?"
+// "This looks really neat! Our state is now stored in the global Redux store and managed with pure functions (Redux Toolkit uses Immer under the hood to guarantee immutability). We can already take advantage of the awesome Redux DevTools."
 
 export default App;

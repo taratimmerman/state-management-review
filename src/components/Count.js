@@ -1,12 +1,12 @@
 import React from 'react';
-import { useCount } from '../App';
+import { useSelector } from 'react-redux';
 
 const Count = () => {
-    const [state] = useCount();
+    const count = useSelector(state => state.counter.value);
 
     return (
         <h1>
-            {state}
+            {count}
         </h1>
     );
 };
